@@ -1,7 +1,7 @@
 race_number: 1
 name: Race 1 — Maiden Special Weight (skeleton)
 date: 2026-05-01
-post_time_et: "12:30"
+post_time_et: "10:30"
 distance: "TBD"
 surface: dirt
 conditions: MSW (placeholder)
@@ -10,5 +10,6 @@ purse_usd: 100000
 track: Churchill Downs
 notes: |
   Non-stakes; field details and exact conditions not pulled from public sources.
+  Verify on Churchill Downs / Equibase board.
 horses: []
 experts: []

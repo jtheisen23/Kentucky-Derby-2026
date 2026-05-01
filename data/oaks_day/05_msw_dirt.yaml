@@ -1,12 +1,12 @@
-race_number: 2
-name: Race 2 — Allowance (skeleton)
+race_number: 5
+name: Race 5 — Maiden Special Weight (skeleton)
 date: 2026-05-01
-post_time_et: "11:01"
+post_time_et: "12:43"
 distance: "TBD"
 surface: dirt
-conditions: Allowance (placeholder)
+conditions: MSW (placeholder)
 field_status: skeleton
-purse_usd: 100000
+purse_usd: 110000
 track: Churchill Downs
 notes: |
   Non-stakes; field details and exact conditions not pulled from public sources.

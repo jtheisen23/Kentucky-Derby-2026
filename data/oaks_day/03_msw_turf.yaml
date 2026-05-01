@@ -1,7 +1,7 @@
 race_number: 3
 name: Race 3 — Maiden Special Weight (turf, skeleton)
 date: 2026-05-01
-post_time_et: "13:32"
+post_time_et: "11:34"
 distance: "TBD"
 surface: turf
 conditions: MSW (placeholder)
@@ -9,6 +9,7 @@ field_status: skeleton
 purse_usd: 110000
 track: Churchill Downs
 notes: |
-  Non-stakes; verify on Churchill Downs / Equibase board.
+  Non-stakes; field details and exact conditions not pulled from public sources.
+  Verify on Churchill Downs / Equibase board.
 horses: []
 experts: []
