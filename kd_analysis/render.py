@@ -293,7 +293,12 @@ def _tickets_section(suggestions: list) -> str:
     return f"<h2>Suggested tickets</h2><table><thead>{head}</thead><tbody>{''.join(rows)}</tbody></table>"
 
 
-def _layout(title: str, body: str) -> str:
+def _layout(title: str, body: str, prefix: str = "") -> str:
+    """Render the page chrome.
+
+    `prefix` is the relative path prefix to the site root (e.g. "" for root
+    pages, "../" for pages in a subdirectory like docs/oaks_day/index.html).
+    """
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     return f"""<!doctype html>
 <html lang="en">
@@ -309,9 +314,11 @@ def _layout(title: str, body: str) -> str:
   <h1>2026 Kentucky Oaks &amp; Derby — Betting Analysis</h1>
   <p>Pace shape, expert consensus, value flags, and ticket structures.</p>
   <nav>
-    <a href="./">Overview</a>
-    <a href="oaks.html">Oaks (Fri)</a>
-    <a href="derby.html">Derby (Sat)</a>
+    <a href="{prefix}index.html">Overview</a>
+    <a href="{prefix}oaks_day/">Oaks Day card</a>
+    <a href="{prefix}oaks.html">Oaks preview</a>
+    <a href="{prefix}derby_day/">Derby Day card</a>
+    <a href="{prefix}derby.html">Derby preview</a>
   </nav>
 </header>
 {body}
@@ -337,7 +344,68 @@ def render_race(race: Race, suggestions: list) -> str:
     return _layout(race.name, body)
 
 
+def _card_table(card: Card, marquee_link_prefix: str = "") -> str:
+    """Render a card schedule as a single HTML table.
+
+    `marquee_link_prefix` is prepended to the marquee race link target
+    (e.g. "" when on the root index, "../" when on a subdir page).
+    """
+    rows = []
+    for cr in card.races:
+        purse = f"${cr.race.purse_usd:,}" if cr.race.purse_usd else "—"
+        is_marquee = card.marquee is cr
+        name_html = _esc(cr.race.name)
+        if is_marquee:
+            target = (
+                f"{marquee_link_prefix}oaks.html"
+                if "Oaks" in card.name
+                else f"{marquee_link_prefix}derby.html"
+            )
+            name_html = f"<a href='{target}'>{name_html}</a>"
+        status_tag = ""
+        if cr.field_status == "skeleton":
+            status_tag = " <span class='tag'>skeleton</span>"
+        elif cr.field_status == "stakes-only":
+            status_tag = " <span class='tag use'>stakes</span>"
+        elif cr.field_status == "full":
+            status_tag = " <span class='tag top'>full preview</span>"
+        rows.append(
+            f"<tr>"
+            f"<td class='num'>{cr.number}</td>"
+            f"<td>{cr.race.post_time_et or '—'}</td>"
+            f"<td>{name_html}{status_tag}</td>"
+            f"<td>{_esc(cr.grade or '—')}</td>"
+            f"<td>{_esc(cr.race.distance)}</td>"
+            f"<td>{_esc(cr.surface or '—')}</td>"
+            f"<td>{_esc(cr.conditions or '—')}</td>"
+            f"<td class='num'>{purse}</td>"
+            f"</tr>"
+        )
+    head = (
+        "<tr><th class='num'>R#</th><th>Post</th><th>Race</th><th>Grade</th>"
+        "<th>Distance</th><th>Surface</th><th>Conditions</th><th class='num'>Purse</th></tr>"
+    )
+    return f"<table><thead>{head}</thead><tbody>{''.join(rows)}</tbody></table>"
+
+
 def render_index(races: list[tuple[str, Race]], cards: list[Card] | None = None) -> str:
+    sections: list[str] = []
+
+    if cards:
+        # Inline the full schedule for each day so users can see all races
+        # without clicking into a subpage.
+        for c in cards:
+            stakes_count = len(c.stakes)
+            sections.append(
+                f"<h2>{_esc(c.name)}</h2>"
+                f"<p class='meta'>{_esc(c.date)} &middot; {_esc(c.track)} "
+                f"&middot; {len(c.races)} races &middot; {stakes_count} graded/listed stakes</p>"
+                f"{_card_table(c)}"
+            )
+            if c.notes:
+                sections.append(f"<div class='proj'>{_esc(c.notes.strip())}</div>")
+
+    # Marquee race summary cards (still useful as a quick jump).
     race_cards = []
     for slug, race in races:
         pending = [e.name for e in race.experts if e.tbd]
@@ -347,29 +415,13 @@ def render_index(races: list[tuple[str, Race]], cards: list[Card] | None = None)
         )
         race_cards.append(
             f"<a class='card' href='{_esc(slug)}.html' style='display:block;text-decoration:none;color:inherit'>"
-            f"<div class='name'>{_esc(race.name)}</div>"
+            f"<div class='name'>{_esc(race.name)} &rarr; full preview</div>"
             f"<div class='ml'>{_meta(race)}</div>"
             f"{pending_html}"
             "</a>"
         )
-
-    sections = [
-        "<h2>Marquee races</h2>",
-        f"<div class='cards'>{''.join(race_cards)}</div>",
-    ]
-
-    if cards:
-        sections.append("<h2>Full cards</h2>")
-        day_cards = []
-        for c in cards:
-            stakes_count = len(c.stakes)
-            day_cards.append(
-                f"<a class='card' href='{_esc(c.slug)}/index.html' style='display:block;text-decoration:none;color:inherit'>"
-                f"<div class='name'>{_esc(c.name)}</div>"
-                f"<div class='ml'>{_esc(c.date)} &middot; {len(c.races)} races &middot; {stakes_count} stakes</div>"
-                "</a>"
-            )
-        sections.append(f"<div class='cards'>{''.join(day_cards)}</div>")
+    sections.append("<h2>Marquee race previews</h2>")
+    sections.append(f"<div class='cards'>{''.join(race_cards)}</div>")
 
     sections += [
         "<h2>Tools</h2>",
@@ -384,40 +436,6 @@ def render_index(races: list[tuple[str, Race]], cards: list[Card] | None = None)
 
 def render_card(card: Card) -> str:
     """Render a per-day card index listing every race with details."""
-    rows = []
-    for cr in card.races:
-        purse = f"${cr.race.purse_usd:,}" if cr.race.purse_usd else "—"
-        is_marquee = card.marquee is cr
-        is_stakes = bool(cr.grade)
-        link_target = ""
-        name_html = _esc(cr.race.name)
-        if is_marquee:
-            slug = "../oaks.html" if "Oaks" in card.name else "../derby.html"
-            name_html = f"<a href='{slug}'>{name_html}</a>"
-            link_target = " (full preview &rarr;)"
-        status_tag = ""
-        if cr.field_status == "skeleton":
-            status_tag = " <span class='tag'>skeleton</span>"
-        elif cr.field_status == "stakes-only":
-            status_tag = " <span class='tag use'>stakes</span>"
-        elif cr.field_status == "full":
-            status_tag = " <span class='tag top'>full preview</span>"
-        rows.append(
-            f"<tr>"
-            f"<td class='num'>{cr.number}</td>"
-            f"<td>{cr.race.post_time_et or '—'}</td>"
-            f"<td>{name_html}{link_target}{status_tag}</td>"
-            f"<td>{_esc(cr.grade or '—')}</td>"
-            f"<td>{_esc(cr.race.distance)}</td>"
-            f"<td>{_esc(cr.surface or '—')}</td>"
-            f"<td>{_esc(cr.conditions or '—')}</td>"
-            f"<td class='num'>{purse}</td>"
-            f"</tr>"
-        )
-    head = (
-        "<tr><th class='num'>R#</th><th>Post</th><th>Race</th><th>Grade</th>"
-        "<th>Distance</th><th>Surface</th><th>Conditions</th><th class='num'>Purse</th></tr>"
-    )
     notes_html = (
         f"<div class='proj'>{_esc(card.notes.strip())}</div>"
         if card.notes else ""
@@ -425,10 +443,10 @@ def render_card(card: Card) -> str:
     body = (
         f"<h1>{_esc(card.name)}</h1>"
         f"<p class='meta'>{_esc(card.date)} &middot; {_esc(card.track)} &middot; {len(card.races)} races</p>"
-        f"<table><thead>{head}</thead><tbody>{''.join(rows)}</tbody></table>"
+        f"{_card_table(card, marquee_link_prefix='../')}"
         f"{notes_html}"
     )
-    return _layout(card.name, body)
+    return _layout(card.name, body, prefix="../")
 
 
 def write_site(
