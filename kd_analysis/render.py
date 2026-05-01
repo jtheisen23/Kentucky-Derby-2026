@@ -369,11 +369,33 @@ def _card_table(card: Card, marquee_link_prefix: str = "") -> str:
             status_tag = " <span class='tag use'>stakes</span>"
         elif cr.field_status == "full":
             status_tag = " <span class='tag top'>full preview</span>"
-        pick_html = (
-            f"<strong>{_esc(cr.race.winner_pick)}</strong>"
-            if cr.race.winner_pick
-            else "<span class='ml'>—</span>"
-        )
+        if cr.race.result_status == "delayed":
+            status_tag += " <span class='tag longshot'>delayed</span>"
+        elif cr.race.result_status == "official":
+            status_tag += " <span class='tag top'>official</span>"
+
+        pick_correct = cr.race.pick_correct
+        if cr.race.winner_pick:
+            if pick_correct is True:
+                pick_html = (
+                    f"<strong style='color:var(--good)'>{_esc(cr.race.winner_pick)}</strong>"
+                    " <span class='tag top'>WON</span>"
+                )
+            elif pick_correct is False:
+                pick_html = (
+                    f"<s class='ml'>{_esc(cr.race.winner_pick)}</s>"
+                    " <span class='tag longshot'>missed</span>"
+                )
+            else:
+                pick_html = f"<strong>{_esc(cr.race.winner_pick)}</strong>"
+        else:
+            pick_html = "<span class='ml'>—</span>"
+
+        if cr.race.actual_winner:
+            result_html = f"<strong style='color:var(--good)'>{_esc(cr.race.actual_winner)}</strong>"
+        else:
+            result_html = "<span class='ml'>—</span>"
+
         rows.append(
             f"<tr>"
             f"<td class='num'>{cr.number}</td>"
@@ -381,14 +403,14 @@ def _card_table(card: Card, marquee_link_prefix: str = "") -> str:
             f"<td>{name_html}{status_tag}</td>"
             f"<td>{_esc(cr.grade or '—')}</td>"
             f"<td>{_esc(cr.race.distance)}</td>"
-            f"<td>{_esc(cr.surface or '—')}</td>"
             f"<td>{pick_html}</td>"
+            f"<td>{result_html}</td>"
             f"<td class='num'>{purse}</td>"
             f"</tr>"
         )
     head = (
         "<tr><th class='num'>R#</th><th>Post</th><th>Race</th><th>Grade</th>"
-        "<th>Distance</th><th>Surface</th><th>Pick</th><th class='num'>Purse</th></tr>"
+        "<th>Distance</th><th>Pick</th><th>Actual winner</th><th class='num'>Purse</th></tr>"
     )
     return f"<table><thead>{head}</thead><tbody>{''.join(rows)}</tbody></table>"
 
@@ -440,27 +462,50 @@ def render_index(races: list[tuple[str, Race]], cards: list[Card] | None = None)
 
 
 def _picks_section(card: Card) -> str:
-    """Per-race winner picks with justification."""
+    """Per-race winner picks with justification + actual result if known."""
     cards_html = []
     for cr in card.races:
         if not cr.race.winner_pick:
             continue
+        pick_correct = cr.race.pick_correct
+        status_html = ""
+        result_html = ""
+        if pick_correct is True:
+            status_html = " <span class='tag top'>WON</span>"
+            result_html = (
+                f"<div class='note'><strong>Result:</strong> {_esc(cr.race.actual_winner)} "
+                f"(2nd: {_esc(cr.race.actual_runner_up or '—')}, "
+                f"3rd: {_esc(cr.race.actual_third or '—')})</div>"
+            )
+        elif pick_correct is False:
+            status_html = " <span class='tag longshot'>missed</span>"
+            result_html = (
+                f"<div class='note'><strong>Actual winner:</strong> "
+                f"<span style='color:var(--good)'>{_esc(cr.race.actual_winner)}</span> "
+                f"(2nd: {_esc(cr.race.actual_runner_up or '—')}, "
+                f"3rd: {_esc(cr.race.actual_third or '—')})</div>"
+            )
+        elif cr.race.result_status == "delayed":
+            status_html = " <span class='tag longshot'>delayed</span>"
+
         cards_html.append(
             "<div class='card'>"
             f"<div><span class='post'>R{cr.number}</span>"
-            f"<span class='ml'>{cr.race.post_time_et} ET &middot; {_esc(cr.race.name)}</span></div>"
+            f"<span class='ml'>{cr.race.post_time_et} ET &middot; {_esc(cr.race.name)}</span>"
+            f"{status_html}</div>"
             f"<div><strong>Pick: {_esc(cr.race.winner_pick)}</strong></div>"
             + (
                 f"<div class='note'>{_esc(cr.race.winner_reason.strip())}</div>"
                 if cr.race.winner_reason
                 else ""
             )
+            + result_html
             + "</div>"
         )
     if not cards_html:
         return ""
     return (
-        "<h2>Winner picks</h2>"
+        "<h2>Winner picks &amp; results</h2>"
         f"<div class='cards'>{''.join(cards_html)}</div>"
     )
 

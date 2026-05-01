@@ -346,23 +346,45 @@ def cmd_card(args: argparse.Namespace) -> None:
 
 def cmd_winners(args: argparse.Namespace) -> None:
     card = _load_card(args.card)
-    print(f"\n{card.name} — winner picks\n")
-    any_pick = False
+    print(f"\n{card.name} — winner picks vs. results\n")
+    won = 0
+    lost = 0
+    pending = 0
     for cr in card.races:
         if not cr.race.winner_pick:
             continue
-        any_pick = True
-        print(f"R{cr.number} ({cr.race.post_time_et} ET) — {cr.race.name}")
-        print(f"  PICK: {cr.race.winner_pick}")
+        status = ""
+        if cr.race.pick_correct is True:
+            status = " [WON]"
+            won += 1
+        elif cr.race.pick_correct is False:
+            status = " [MISSED]"
+            lost += 1
+        elif cr.race.result_status == "delayed":
+            status = " [delayed]"
+            pending += 1
+        else:
+            pending += 1
+
+        print(f"R{cr.number} ({cr.race.post_time_et} ET) — {cr.race.name}{status}")
+        print(f"  PICK:   {cr.race.winner_pick}")
+        if cr.race.actual_winner:
+            print(
+                f"  ACTUAL: {cr.race.actual_winner}"
+                + (f" / {cr.race.actual_runner_up}" if cr.race.actual_runner_up else "")
+                + (f" / {cr.race.actual_third}" if cr.race.actual_third else "")
+                + (f"  ({cr.race.actual_time}, {cr.race.actual_track_condition})"
+                   if cr.race.actual_time else "")
+            )
         if cr.race.winner_reason:
             for line in cr.race.winner_reason.strip().splitlines():
-                print(f"        {line.strip()}")
+                print(f"          {line.strip()}")
         print()
-    if not any_pick:
-        print("(no picks set in this card's YAML files)")
+
+    print(f"Tally: {won} won, {lost} missed, {pending} pending/delayed")
     skipped = [cr for cr in card.races if not cr.race.winner_pick]
     if skipped:
-        print("Races without picks (no public field data available):")
+        print("\nRaces without picks (no public field data available):")
         for cr in skipped:
             print(f"  R{cr.number} ({cr.race.post_time_et}) — {cr.race.name}")
 

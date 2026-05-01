@@ -9,12 +9,28 @@ conditions: 3-year-old fillies
 field_status: full
 purse_usd: 1500000
 track: Churchill Downs
-winner_pick: Percy's Bar
+winner_pick: Zany
 winner_reason: |
-  Beat ML-favorite Zany head-to-head in the Ashland (G1); getting better odds (6-1 vs 4-1) for the same form. Lone-speed pace shape with deep closer pool fits her late-running style.
+  REVISED post-storm. Original pick was Percy's Bar based on a fast-track
+  closer setup. Severe weather hit Churchill Downs immediately after the
+  Eight Belles (R6) was rushed in, and the Oaks card was delayed — the
+  dirt track will almost certainly be off (sloppy / muddy / wet-fast) for
+  the Oaks. That swings the read:
+    - Closers (Percy's Bar, Counting Stars, Always A Runner) have to splash
+      through tiring moisture; their late kicks get blunted
+    - Tactical / forward types (Zany, Meaning, Explora) get a much better
+      trip if the track plays speed-favoring as Churchill mud often does
+    - Zany is a proven G2 winner at the 1 1/8 distance with Pletcher/Irad —
+      a profile that travels well over an off track
+  Confirm the actual track condition at post; if Churchill miraculously
+  comes up fast, revert to Percy's Bar.
+result_status: delayed
 notes: |
   13 fillies after Nycon scratch from original 14. ML odds set 2026-04-25.
-  Edit `live_odds` on each horse to compute overlay/underlay vs morning line.
+  Storm hit the grounds after the Eight Belles (R6); race delayed beyond
+  the 8:40 PM ET scheduled post. Track condition for the Oaks is TBD —
+  expect off-track. Edit `live_odds` on each horse to compute overlay vs
+  morning line once the wagering reopens.
 
 horses:
   - post: 1

@@ -8,6 +8,7 @@ conditions: Allowance (placeholder)
 field_status: skeleton
 purse_usd: 110000
 track: Churchill Downs
+result_status: delayed
 notes: |
   Non-stakes; verify on Churchill Downs / Equibase board.
 horses: []

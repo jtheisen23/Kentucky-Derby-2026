@@ -74,6 +74,20 @@ class Race:
     experts: list[Expert] = field(default_factory=list)
     winner_pick: str = ""        # name of the synthesized winner pick
     winner_reason: str = ""      # short justification
+    # Post-race fields (filled in once the race runs):
+    actual_winner: str = ""      # confirmed winning horse
+    actual_runner_up: str = ""
+    actual_third: str = ""
+    actual_time: str = ""        # finish time, e.g. "1:22.36"
+    actual_track_condition: str = ""  # "fast", "sloppy", "good", "firm", "yielding"
+    result_status: str = "pending"  # "pending", "delayed", "official"
+
+    @property
+    def pick_correct(self) -> bool | None:
+        """True if our winner_pick matches actual_winner; None if not yet decided."""
+        if not self.winner_pick or not self.actual_winner:
+            return None
+        return self.winner_pick.strip().lower() == self.actual_winner.strip().lower()
 
     def by_post(self, post: int) -> Horse:
         for h in self.horses:
