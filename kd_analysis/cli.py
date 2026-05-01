@@ -17,6 +17,7 @@ from kd_analysis.preview import (
     pace_shape,
     value_flags,
 )
+from kd_analysis.render import write_site
 from kd_analysis.tickets import (
     Ticket,
     exacta_box,
@@ -267,8 +268,29 @@ def main() -> None:
     p_pre.add_argument("race", choices=["oaks", "derby"])
     p_pre.set_defaults(func=cmd_preview)
 
+    p_ren = sub.add_parser("render", help="Render static HTML site to docs/")
+    p_ren.add_argument("--out", default="docs", help="Output directory (default: docs)")
+    p_ren.set_defaults(func=cmd_render)
+
     args = parser.parse_args()
     args.func(args)
+
+
+def cmd_render(args: argparse.Namespace) -> None:
+    repo_root = DATA_DIR.parent
+    out_dir = (repo_root / args.out).resolve()
+    races = {
+        "oaks": _load("oaks"),
+        "derby": _load("derby"),
+    }
+    suggestions = {
+        "oaks": _oaks_tickets(),
+        "derby": _derby_tickets(),
+    }
+    written = write_site(out_dir, races, suggestions)
+    for p in written:
+        print(f"  wrote {p.relative_to(repo_root)}")
+    print(f"\nDone. Open {out_dir / 'index.html'} in a browser.")
 
 
 if __name__ == "__main__":

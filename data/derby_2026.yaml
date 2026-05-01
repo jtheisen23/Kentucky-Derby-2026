@@ -231,3 +231,41 @@ experts:
       VSiN PDF and the Magic Mike Show podcast (ep. 620) blocked
       automated fetch. Fill in once you have the guide.
     tbd: true
+
+  - name: Public Consensus (synthesized)
+    affiliation: Aggregated from public tipsheets and previews
+    top_picks: [1, 6, 18, 12]          # Renegade, Commandment, Further Ado, Chief Wallabee
+    use_horses: [9, 15]                # The Puma, Emerging Market
+    longshots: [19, 11]                # Golden Tempo, Incredibolt
+    source: https://www.bloodhorse.com/horse-racing/articles/291397/2026-kentucky-derby-how-fast-a-pace-will-we-see
+    notes: |
+      Synthesized aggregate, NOT a single named handicapper. Compiled from
+      public Derby previews (BloodHorse pace article, TwinSpires run-style
+      analysis, CBS Sports cheat sheet, Covers, NBC Sports, ABR trifecta
+      picks). Top tier: Renegade (4-1 ML chalk, Arkansas Derby winner,
+      best closing fraction in field), Commandment (Florida Derby G1
+      winner, 100/101 Beyers), Further Ado (Blue Grass G1 by 11L, field-
+      best 106 Beyer), Chief Wallabee (3-for-3 ITM in graded company,
+      Mott peaking horse). Use: The Puma (Florida Derby 2nd), Emerging
+      Market (Louisiana Derby winner). Longshots: Golden Tempo (LA Derby
+      3rd) and Incredibolt (Virginia Derby winner, Moss-flagged).
+    tbd: false
+
+  - name: House Synthesis
+    affiliation: This repo's pace + form read
+    top_picks: [6, 1]                  # Commandment, Renegade
+    use_horses: [12, 15]               # Chief Wallabee, Emerging Market
+    longshots: [11, 19]                # Incredibolt, Golden Tempo
+    source: ""
+    notes: |
+      4 pure-speed types (So Happy, Potente, Pavlovian, Six Speed) project
+      contested sub-:23/sub-:46 fractions; pace gets cooked. That favors
+      stalkers/closers with proven late kicks. Top pick: Commandment —
+      best balance of class (Florida Derby G1, beat The Puma + Chief
+      Wallabee head-to-head), trip (post 6 ideal mid-pack), and pace fit
+      (forward stalker, not pure speed). Renegade is co-top but post 1
+      is a real trip risk. Chief Wallabee is the 8-1 value closer.
+      Further Ado (#18) is omitted from top tier — sharps flag him as
+      underlay (Blue Grass field was soft) and Moss noted he may not be
+      "big and robust enough" to handle the 11L effort.
+    tbd: false

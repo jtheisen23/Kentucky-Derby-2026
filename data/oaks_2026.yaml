@@ -161,3 +161,36 @@ experts:
       Specific Oaks selections not retrievable from public search.
       Fill in from the VSiN guide or the Magic Mike Show podcast.
     tbd: true
+
+  - name: Public Consensus (synthesized)
+    affiliation: Aggregated from public tipsheets and previews
+    top_picks: [2, 9, 5]               # Zany, Percy's Bar, Meaning
+    use_horses: [4, 8]                 # Counting Stars, Prom Queen
+    longshots: [7, 10]                 # Always A Runner, Pashmina
+    source: https://www.twinspires.com/edge/racing/tipsheet-2026-kentucky-oaks-apr-29/
+    notes: |
+      Synthesized aggregate, NOT a single named handicapper. Compiled from
+      public Oaks previews (TwinSpires Tipsheet/Contenders, FanDuel Research,
+      Horse Racing Nation field rankings, BloodHorse, SI/On SI, Covers).
+      Top tier: Zany (4-1 ML fav, G2 1 1/8 proven), Percy's Bar (Ashland G1
+      winner over Zany), Meaning (Las Virgenes + Santa Anita Oaks). Use:
+      Counting Stars (Fantasy G2/Honeybee 2nd), Prom Queen (Cox 2-for-2).
+      Longshots: Always A Runner (10-1 "live longshot" flagged by sharps,
+      Gazelle G2 winner, 1 1/8 proven) and Pashmina (Gazelle 2nd).
+    tbd: false
+
+  - name: House Synthesis
+    affiliation: This repo's pace + form read
+    top_picks: [9, 2]                  # Percy's Bar, Zany
+    use_horses: [5, 7]                 # Meaning, Always A Runner
+    longshots: [4]                     # Counting Stars
+    source: ""
+    notes: |
+      Lone-speed pace setup (only Dazzling Dame is pure E) means honest but
+      not melted fractions — the closer pool is deep (6 'S' types). Top
+      pick: Percy's Bar — beat Zany head-to-head in the Ashland and is
+      getting 50% better odds (6-1 vs 4-1). Zany is legit chalk: G2 winner
+      at the 1 1/8 distance, but no value at 4-1. Meaning is the safe west-
+      coast play. Always A Runner is the value flag at 10-1: proven 1 1/8,
+      Brown/J. Ortiz, deep closer pool gives her live underneath.
+    tbd: false

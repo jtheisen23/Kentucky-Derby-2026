@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026 Kentucky Oaks &amp; Derby</title>
+<style>
+:root {
+  --bg: #fafaf7; --fg: #1a1a1a; --muted: #6b6b6b; --line: #e2e2dd;
+  --accent: #8b1538; --card: #ffffff; --good: #1f7a3a; --warn: #b85c00;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15161a; --fg: #ececec; --muted: #9a9a9a; --line: #2a2a30;
+    --accent: #d96a8a; --card: #1c1d22; --good: #4cb87a; --warn: #e69e4d;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.container { max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+header.site { border-bottom: 1px solid var(--line); margin-bottom: 1.5rem; padding-bottom: 1rem; }
+header.site h1 { margin: 0 0 .25rem; font-size: 1.4rem; }
+header.site p { margin: 0; color: var(--muted); }
+nav { margin: 1rem 0; }
+nav a {
+  display: inline-block; margin-right: .75rem; padding: .35rem .75rem;
+  border: 1px solid var(--line); border-radius: 999px;
+  text-decoration: none; color: var(--fg); font-size: .9rem;
+}
+nav a:hover { border-color: var(--accent); color: var(--accent); }
+h2 {
+  font-size: 1.1rem; text-transform: uppercase; letter-spacing: .05em;
+  border-bottom: 1px solid var(--line); padding-bottom: .35rem; margin: 2rem 0 .75rem;
+}
+h3 { font-size: 1rem; margin: 1.25rem 0 .5rem; }
+.meta { color: var(--muted); font-size: .9rem; margin-bottom: 1rem; }
+.cards { display: grid; gap: .75rem; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+.card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+  padding: .85rem 1rem;
+}
+.card .name { font-weight: 600; }
+.card .post { color: var(--accent); font-weight: 700; margin-right: .35rem; }
+.card .ml { color: var(--muted); font-size: .9rem; }
+.card .note { font-size: .85rem; color: var(--muted); margin-top: .35rem; }
+.tag { display: inline-block; font-size: .72rem; padding: 1px 6px; border-radius: 4px; margin-right: .25rem;
+       border: 1px solid var(--line); }
+.tag.top { color: var(--good); border-color: var(--good); }
+.tag.use { color: var(--warn); border-color: var(--warn); }
+.tag.longshot { color: var(--accent); border-color: var(--accent); }
+table {
+  width: 100%; border-collapse: collapse; font-size: .92rem; margin-top: .5rem;
+}
+th, td {
+  text-align: left; padding: .4rem .5rem; border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+th { font-weight: 600; color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.pace-line { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .9rem; }
+.proj { background: var(--card); border-left: 3px solid var(--accent); padding: .5rem .75rem; margin-top: .5rem; }
+.expert {
+  background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+  padding: .85rem 1rem; margin-bottom: .75rem;
+}
+.expert h3 { margin-top: 0; }
+.expert .pending { color: var(--warn); font-size: .8rem; margin-left: .35rem; }
+.expert .picks { font-size: .9rem; }
+.expert .notes { color: var(--muted); font-size: .85rem; margin-top: .5rem; white-space: pre-wrap; }
+.expert a { color: var(--accent); }
+footer { color: var(--muted); font-size: .8rem; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+</style>
+</head>
+<body>
+<div class="container">
+<header class="site">
+  <h1>2026 Kentucky Oaks &amp; Derby — Betting Analysis</h1>
+  <p>Pace shape, expert consensus, value flags, and ticket structures.</p>
+  <nav>
+    <a href="./">Overview</a>
+    <a href="oaks.html">Oaks (Fri)</a>
+    <a href="derby.html">Derby (Sat)</a>
+  </nav>
+</header>
+<h2>Races</h2><div class='cards'><a class='card' href='oaks.html' style='display:block;text-decoration:none;color:inherit'><div class='name'>2026 Kentucky Oaks (G1)</div><div class='ml'>2026-05-01 &middot; 20:40 ET &middot; Churchill Downs &middot; 1 1/8 miles &middot; $1,500,000 &middot; 13 horses</div><div class='note'>Pending: Eddie Olczyk, Randy Moss, Mike Somich</div></a><a class='card' href='derby.html' style='display:block;text-decoration:none;color:inherit'><div class='name'>2026 Kentucky Derby (G1)</div><div class='ml'>2026-05-02 &middot; 18:57 ET &middot; Churchill Downs &middot; 1 1/4 miles &middot; $5,000,000 &middot; 20 horses</div><div class='note'>Pending: Mike Somich</div></a></div><h2>Tools</h2><p>This site is generated from the same data the <code>kd</code> CLI uses. Run <code>kd preview oaks</code> or <code>kd preview derby</code> in the repo for a terminal view, or edit <code>data/*.yaml</code> to adjust running styles, expert picks, or live odds — the site rebuilds automatically on push to <code>main</code>.</p>
+<footer>Built 2026-05-01 16:11 UTC. Data is hand-curated from public sources; verify against the official Churchill Downs board before betting.</footer>
+</div>
+</body>
+</html>

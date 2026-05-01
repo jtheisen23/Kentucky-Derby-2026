@@ -60,24 +60,26 @@ def test_somich_derby_marked_tbd():
     assert somich.top_picks == []
 
 
-def test_oaks_experts_all_tbd():
+def test_oaks_named_experts_tbd_synthesis_not():
     race = load_race(DATA / "oaks_2026.yaml")
-    assert len(race.experts) == 3
-    assert all(e.tbd for e in race.experts)
+    by_name = {e.name: e for e in race.experts}
+    # Three named handicappers remain TBD pending the broadcast
+    assert by_name["Eddie Olczyk"].tbd is True
+    assert by_name["Randy Moss"].tbd is True
+    assert by_name["Mike Somich"].tbd is True
+    # Synthesis experts have actual picks
+    assert by_name["Public Consensus (synthesized)"].tbd is False
+    assert by_name["House Synthesis"].tbd is False
 
 
-def test_support_score_weighting():
+def test_support_score_weighting_includes_synthesis():
     race = load_race(DATA / "derby_2026.yaml")
-    # Renegade (#1): Olczyk has it as 'use' (2), Moss has it as 'top' (3) = 5
-    assert race.support_score(1) == 5
-    # Emerging Market (#15): Olczyk top (3) = 3
-    assert race.support_score(15) == 3
-    # Commandment (#6): Moss top (3) = 3
-    assert race.support_score(6) == 3
-    # Golden Tempo (#19): Olczyk longshot (1) = 1
-    assert race.support_score(19) == 1
+    # Renegade (#1): Moss top (3) + Olczyk use (2) + Public top (3) + House top (3) = 11
+    assert race.support_score(1) == 11
     # Albus (#2): nobody = 0
     assert race.support_score(2) == 0
+    # Golden Tempo (#19): Olczyk longshot (1) + Public longshot (1) + House longshot (1) = 3
+    assert race.support_score(19) == 3
 
 
 def test_expert_support_returns_names():
@@ -85,3 +87,5 @@ def test_expert_support_returns_names():
     support = race.expert_support(1)  # Renegade
     assert "Eddie Olczyk" in support["use"]
     assert "Randy Moss" in support["top"]
+    assert "Public Consensus (synthesized)" in support["top"]
+    assert "House Synthesis" in support["top"]

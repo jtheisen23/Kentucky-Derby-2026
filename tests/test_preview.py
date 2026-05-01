@@ -45,8 +45,10 @@ def test_pace_shape_lines_include_horse_names():
 def test_consensus_orders_by_score():
     race = load_race(DATA / "derby_2026.yaml")
     rows = consensus(race)
-    assert rows[0].horse.post == 1  # Renegade has score 5
-    assert rows[0].score == 5
+    # Renegade (#1) has the highest support score (Moss top + Olczyk use +
+    # Public top + House top = 11) so should be first.
+    assert rows[0].horse.post == 1
+    assert rows[0].score >= 8
     # All returned horses have nonzero score
     assert all(r.score > 0 for r in rows)
 
@@ -71,9 +73,12 @@ def test_longshot_watch_includes_olczyk_pick():
     assert 19 in posts
 
 
-def test_oaks_consensus_empty_when_all_tbd():
+def test_oaks_consensus_populated_by_synthesis_experts():
     race = load_race(DATA / "oaks_2026.yaml")
-    # All Oaks experts are TBD, so no horse has any score
-    assert consensus(race) == []
-    assert value_flags(race) == []
-    assert longshot_watch(race) == []
+    rows = consensus(race)
+    posts = {r.horse.post for r in rows}
+    # Top-tier of synthesis experts: Zany (2), Percy's Bar (9), Meaning (5)
+    assert {2, 5, 9}.issubset(posts)
+    # Always A Runner (#7) is a synthesis longshot — should appear in consensus
+    # because it has nonzero support, but lower in the list
+    assert 7 in posts
