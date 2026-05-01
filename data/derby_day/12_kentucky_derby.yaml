@@ -1,7 +1,12 @@
+race_number: 12
 name: 2026 Kentucky Derby (G1)
 date: 2026-05-02
 post_time_et: "18:57"
 distance: "1 1/4 miles"
+surface: dirt
+grade: G1
+conditions: 3-year-olds
+field_status: full
 purse_usd: 5000000
 track: Churchill Downs
 notes: |

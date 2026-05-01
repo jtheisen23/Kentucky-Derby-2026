@@ -99,8 +99,81 @@ class Race:
 
 def load_race(path: str | Path) -> Race:
     raw = yaml.safe_load(Path(path).read_text())
-    horses = [Horse(**h) for h in raw.pop("horses")]
+    horses_raw = raw.pop("horses", None) or []
+    horses = [Horse(**h) for h in horses_raw]
     experts_raw = raw.pop("experts", []) or []
     experts = [Expert(**e) for e in experts_raw]
     raw["date"] = str(raw["date"])
+    raw.pop("race_number", None)  # card metadata; not part of Race
+    raw.pop("grade", None)
+    raw.pop("surface", None)
+    raw.pop("conditions", None)
+    raw.pop("field_status", None)
     return Race(horses=horses, experts=experts, **raw)
+
+
+@dataclass
+class CardRace:
+    """A race within a card. Wraps a Race with card-positioning metadata."""
+
+    number: int
+    race: Race
+    grade: str = ""               # "G1", "G2", "G3", or "" for non-graded
+    surface: str = ""             # "dirt" or "turf"
+    conditions: str = ""          # "3yo fillies", "4up", etc.
+    field_status: str = "full"    # "full", "stakes-only", "skeleton"
+
+
+@dataclass
+class Card:
+    """An ordered set of races for a single day at a single track."""
+
+    name: str                     # "2026 Kentucky Oaks Day"
+    date: str
+    track: str
+    slug: str                     # "oaks_day"
+    races: list[CardRace]
+    notes: str = ""
+
+    @property
+    def stakes(self) -> list[CardRace]:
+        return [r for r in self.races if r.grade]
+
+    @property
+    def marquee(self) -> CardRace | None:
+        for r in self.races:
+            if "Kentucky Oaks" in r.race.name or "Kentucky Derby" in r.race.name:
+                return r
+        return None
+
+
+def load_card(card_dir: str | Path) -> Card:
+    """Load all race YAMLs in `card_dir` plus a card.yaml metadata file.
+
+    Race files must start with a 2-digit race number (e.g. ``03_eight_belles.yaml``).
+    """
+    cdir = Path(card_dir)
+    meta = yaml.safe_load((cdir / "card.yaml").read_text())
+    meta["date"] = str(meta["date"])
+
+    races: list[CardRace] = []
+    for path in sorted(cdir.glob("[0-9][0-9]_*.yaml")):
+        raw = yaml.safe_load(path.read_text())
+        number = int(raw.get("race_number") or path.name.split("_", 1)[0])
+        grade = raw.get("grade", "") or ""
+        surface = raw.get("surface", "") or ""
+        conditions = raw.get("conditions", "") or ""
+        field_status = raw.get("field_status", "full") or "full"
+        race = load_race(path)
+        races.append(
+            CardRace(
+                number=number,
+                race=race,
+                grade=grade,
+                surface=surface,
+                conditions=conditions,
+                field_status=field_status,
+            )
+        )
+    races.sort(key=lambda r: r.number)
+    return Card(races=races, **meta)

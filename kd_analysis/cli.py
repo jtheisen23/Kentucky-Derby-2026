@@ -9,7 +9,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from kd_analysis.model import Race, load_race
+from kd_analysis.model import Card, Race, load_card, load_race
 from kd_analysis.odds import implied_probability, overlay_pct, book_overround
 from kd_analysis.preview import (
     consensus,
@@ -28,12 +28,30 @@ from kd_analysis.tickets import (
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
+# Marquee races live inside their card directory.
+MARQUEE_PATHS = {
+    "oaks": DATA_DIR / "oaks_day" / "13_kentucky_oaks.yaml",
+    "derby": DATA_DIR / "derby_day" / "12_kentucky_derby.yaml",
+}
+
+CARD_PATHS = {
+    "oaks_day": DATA_DIR / "oaks_day",
+    "derby_day": DATA_DIR / "derby_day",
+}
+
 
 def _load(race_name: str) -> Race:
-    path = DATA_DIR / f"{race_name}_2026.yaml"
-    if not path.exists():
-        sys.exit(f"No race data at {path}")
+    path = MARQUEE_PATHS.get(race_name)
+    if path is None or not path.exists():
+        sys.exit(f"No race data for {race_name!r}")
     return load_race(path)
+
+
+def _load_card(card_name: str) -> Card:
+    path = CARD_PATHS.get(card_name)
+    if path is None or not path.exists():
+        sys.exit(f"No card data for {card_name!r}")
+    return load_card(path)
 
 
 def _support_glyph(buckets: dict[str, list[str]]) -> str:
@@ -272,6 +290,10 @@ def main() -> None:
     p_ren.add_argument("--out", default="docs", help="Output directory (default: docs)")
     p_ren.set_defaults(func=cmd_render)
 
+    p_card = sub.add_parser("card", help="Show full card schedule for a day")
+    p_card.add_argument("card", choices=["oaks_day", "derby_day"])
+    p_card.set_defaults(func=cmd_card)
+
     args = parser.parse_args()
     args.func(args)
 
@@ -287,10 +309,31 @@ def cmd_render(args: argparse.Namespace) -> None:
         "oaks": _oaks_tickets(),
         "derby": _derby_tickets(),
     }
-    written = write_site(out_dir, races, suggestions)
+    cards = {
+        "oaks_day": _load_card("oaks_day"),
+        "derby_day": _load_card("derby_day"),
+    }
+    written = write_site(out_dir, races, suggestions, cards=cards)
     for p in written:
         print(f"  wrote {p.relative_to(repo_root)}")
     print(f"\nDone. Open {out_dir / 'index.html'} in a browser.")
+
+
+def cmd_card(args: argparse.Namespace) -> None:
+    card = _load_card(args.card)
+    print(f"\n{card.name} — {card.date} — {card.track}")
+    print(f"{'#':<3}{'Post':<8}{'Race':<48}{'Grade':<6}{'Distance':<14}{'Surface':<7}{'Status':<13}{'Purse':>10}")
+    print("-" * 109)
+    for cr in card.races:
+        purse = f"${cr.race.purse_usd:,}" if cr.race.purse_usd else "—"
+        print(
+            f"{cr.number:<3}{cr.race.post_time_et or '—':<8}"
+            f"{cr.race.name[:47]:<48}{cr.grade or '—':<6}"
+            f"{cr.race.distance:<14}{cr.surface or '—':<7}"
+            f"{cr.field_status:<13}{purse:>10}"
+        )
+    if card.notes:
+        print(f"\n{card.notes.strip()}")
 
 
 if __name__ == "__main__":

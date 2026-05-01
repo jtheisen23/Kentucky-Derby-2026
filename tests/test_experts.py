@@ -27,7 +27,7 @@ def test_expert_can_be_in_multiple_buckets():
 
 
 def test_derby_loads_three_experts():
-    race = load_race(DATA / "derby_2026.yaml")
+    race = load_race(DATA / "derby_day" / "12_kentucky_derby.yaml")
     names = [e.name for e in race.experts]
     assert "Eddie Olczyk" in names
     assert "Randy Moss" in names
@@ -35,7 +35,7 @@ def test_derby_loads_three_experts():
 
 
 def test_olczyk_derby_picks_intact():
-    race = load_race(DATA / "derby_2026.yaml")
+    race = load_race(DATA / "derby_day" / "12_kentucky_derby.yaml")
     olczyk = next(e for e in race.experts if e.name == "Eddie Olczyk")
     # Emerging Market top, Renegade use, Golden Tempo longshot
     assert olczyk.top_picks == [15]
@@ -45,7 +45,7 @@ def test_olczyk_derby_picks_intact():
 
 
 def test_moss_derby_top_five():
-    race = load_race(DATA / "derby_2026.yaml")
+    race = load_race(DATA / "derby_day" / "12_kentucky_derby.yaml")
     moss = next(e for e in race.experts if e.name == "Randy Moss")
     # Top-5 narrowed: Commandment(6), Further Ado(18), Renegade(1), The Puma(9), Chief Wallabee(12)
     assert set(moss.top_picks) == {1, 6, 9, 12, 18}
@@ -53,7 +53,7 @@ def test_moss_derby_top_five():
 
 
 def test_somich_derby_marked_tbd():
-    race = load_race(DATA / "derby_2026.yaml")
+    race = load_race(DATA / "derby_day" / "12_kentucky_derby.yaml")
     somich = next(e for e in race.experts if e.name == "Mike Somich")
     assert somich.tbd is True
     # No fabricated picks
@@ -61,7 +61,7 @@ def test_somich_derby_marked_tbd():
 
 
 def test_oaks_named_experts_tbd_synthesis_not():
-    race = load_race(DATA / "oaks_2026.yaml")
+    race = load_race(DATA / "oaks_day" / "13_kentucky_oaks.yaml")
     by_name = {e.name: e for e in race.experts}
     # Three named handicappers remain TBD pending the broadcast
     assert by_name["Eddie Olczyk"].tbd is True
@@ -73,7 +73,7 @@ def test_oaks_named_experts_tbd_synthesis_not():
 
 
 def test_support_score_weighting_includes_synthesis():
-    race = load_race(DATA / "derby_2026.yaml")
+    race = load_race(DATA / "derby_day" / "12_kentucky_derby.yaml")
     # Renegade (#1): Moss top (3) + Olczyk use (2) + Public top (3) + House top (3) = 11
     assert race.support_score(1) == 11
     # Albus (#2): nobody = 0
@@ -83,7 +83,7 @@ def test_support_score_weighting_includes_synthesis():
 
 
 def test_expert_support_returns_names():
-    race = load_race(DATA / "derby_2026.yaml")
+    race = load_race(DATA / "derby_day" / "12_kentucky_derby.yaml")
     support = race.expert_support(1)  # Renegade
     assert "Eddie Olczyk" in support["use"]
     assert "Randy Moss" in support["top"]

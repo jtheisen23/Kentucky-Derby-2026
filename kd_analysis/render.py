@@ -11,7 +11,7 @@ import html
 from datetime import datetime, timezone
 from pathlib import Path
 
-from kd_analysis.model import Expert, Race
+from kd_analysis.model import Card, CardRace, Expert, Race
 from kd_analysis.odds import implied_probability, overlay_pct
 from kd_analysis.preview import (
     STYLE_LABEL,
@@ -337,43 +337,124 @@ def render_race(race: Race, suggestions: list) -> str:
     return _layout(race.name, body)
 
 
-def render_index(races: list[tuple[str, Race]]) -> str:
-    cards = []
+def render_index(races: list[tuple[str, Race]], cards: list[Card] | None = None) -> str:
+    race_cards = []
     for slug, race in races:
         pending = [e.name for e in race.experts if e.tbd]
         pending_html = (
             f"<div class='note'>Pending: {_esc(', '.join(pending))}</div>"
             if pending else ""
         )
-        cards.append(
+        race_cards.append(
             f"<a class='card' href='{_esc(slug)}.html' style='display:block;text-decoration:none;color:inherit'>"
             f"<div class='name'>{_esc(race.name)}</div>"
             f"<div class='ml'>{_meta(race)}</div>"
             f"{pending_html}"
             "</a>"
         )
-    body = (
-        "<h2>Races</h2>"
-        f"<div class='cards'>{''.join(cards)}</div>"
-        "<h2>Tools</h2>"
+
+    sections = [
+        "<h2>Marquee races</h2>",
+        f"<div class='cards'>{''.join(race_cards)}</div>",
+    ]
+
+    if cards:
+        sections.append("<h2>Full cards</h2>")
+        day_cards = []
+        for c in cards:
+            stakes_count = len(c.stakes)
+            day_cards.append(
+                f"<a class='card' href='{_esc(c.slug)}/index.html' style='display:block;text-decoration:none;color:inherit'>"
+                f"<div class='name'>{_esc(c.name)}</div>"
+                f"<div class='ml'>{_esc(c.date)} &middot; {len(c.races)} races &middot; {stakes_count} stakes</div>"
+                "</a>"
+            )
+        sections.append(f"<div class='cards'>{''.join(day_cards)}</div>")
+
+    sections += [
+        "<h2>Tools</h2>",
         "<p>This site is generated from the same data the <code>kd</code> CLI uses. "
-        "Run <code>kd preview oaks</code> or <code>kd preview derby</code> in the repo "
-        "for a terminal view, or edit <code>data/*.yaml</code> to adjust running styles, "
-        "expert picks, or live odds — the site rebuilds automatically on push to <code>main</code>.</p>"
+        "Run <code>kd preview oaks</code>, <code>kd preview derby</code>, or "
+        "<code>kd card oaks_day</code> for a terminal view, or edit "
+        "<code>data/&lt;day&gt;/*.yaml</code> to adjust running styles, expert picks, "
+        "or live odds — the site rebuilds automatically on push to <code>main</code>.</p>",
+    ]
+    return _layout("2026 Kentucky Oaks & Derby", "".join(sections))
+
+
+def render_card(card: Card) -> str:
+    """Render a per-day card index listing every race with details."""
+    rows = []
+    for cr in card.races:
+        purse = f"${cr.race.purse_usd:,}" if cr.race.purse_usd else "—"
+        is_marquee = card.marquee is cr
+        is_stakes = bool(cr.grade)
+        link_target = ""
+        name_html = _esc(cr.race.name)
+        if is_marquee:
+            slug = "../oaks.html" if "Oaks" in card.name else "../derby.html"
+            name_html = f"<a href='{slug}'>{name_html}</a>"
+            link_target = " (full preview &rarr;)"
+        status_tag = ""
+        if cr.field_status == "skeleton":
+            status_tag = " <span class='tag'>skeleton</span>"
+        elif cr.field_status == "stakes-only":
+            status_tag = " <span class='tag use'>stakes</span>"
+        elif cr.field_status == "full":
+            status_tag = " <span class='tag top'>full preview</span>"
+        rows.append(
+            f"<tr>"
+            f"<td class='num'>{cr.number}</td>"
+            f"<td>{cr.race.post_time_et or '—'}</td>"
+            f"<td>{name_html}{link_target}{status_tag}</td>"
+            f"<td>{_esc(cr.grade or '—')}</td>"
+            f"<td>{_esc(cr.race.distance)}</td>"
+            f"<td>{_esc(cr.surface or '—')}</td>"
+            f"<td>{_esc(cr.conditions or '—')}</td>"
+            f"<td class='num'>{purse}</td>"
+            f"</tr>"
+        )
+    head = (
+        "<tr><th class='num'>R#</th><th>Post</th><th>Race</th><th>Grade</th>"
+        "<th>Distance</th><th>Surface</th><th>Conditions</th><th class='num'>Purse</th></tr>"
     )
-    return _layout("2026 Kentucky Oaks & Derby", body)
+    notes_html = (
+        f"<div class='proj'>{_esc(card.notes.strip())}</div>"
+        if card.notes else ""
+    )
+    body = (
+        f"<h1>{_esc(card.name)}</h1>"
+        f"<p class='meta'>{_esc(card.date)} &middot; {_esc(card.track)} &middot; {len(card.races)} races</p>"
+        f"<table><thead>{head}</thead><tbody>{''.join(rows)}</tbody></table>"
+        f"{notes_html}"
+    )
+    return _layout(card.name, body)
 
 
-def write_site(out_dir: Path, races: dict[str, Race], suggestions: dict[str, list]) -> list[Path]:
-    """Write index.html, oaks.html, derby.html and a .nojekyll marker."""
+def write_site(
+    out_dir: Path,
+    races: dict[str, Race],
+    suggestions: dict[str, list],
+    cards: dict[str, Card] | None = None,
+) -> list[Path]:
+    """Write index.html, marquee race pages, and per-day card pages."""
     out_dir.mkdir(parents=True, exist_ok=True)
     written: list[Path] = []
     for slug, race in races.items():
         path = out_dir / f"{slug}.html"
         path.write_text(render_race(race, suggestions.get(slug, [])))
         written.append(path)
+    if cards:
+        for slug, card in cards.items():
+            day_dir = out_dir / slug
+            day_dir.mkdir(parents=True, exist_ok=True)
+            (day_dir / "index.html").write_text(render_card(card))
+            written.append(day_dir / "index.html")
     (out_dir / "index.html").write_text(
-        render_index([(slug, race) for slug, race in races.items()])
+        render_index(
+            [(slug, race) for slug, race in races.items()],
+            cards=list(cards.values()) if cards else None,
+        )
     )
     written.append(out_dir / "index.html")
     nojekyll = out_dir / ".nojekyll"

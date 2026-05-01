@@ -14,21 +14,21 @@ DATA = Path(__file__).resolve().parent.parent / "data"
 
 
 def test_pace_shape_derby_speed_count():
-    race = load_race(DATA / "derby_2026.yaml")
+    race = load_race(DATA / "derby_day" / "12_kentucky_derby.yaml")
     shape = pace_shape(race)
     # YAML has So Happy, Potente, Pavlovian, Six Speed as 'E' (4 pure speeds)
     assert shape.counts["E"] == 4
 
 
 def test_pace_shape_derby_projection_mentions_closers():
-    race = load_race(DATA / "derby_2026.yaml")
+    race = load_race(DATA / "derby_day" / "12_kentucky_derby.yaml")
     shape = pace_shape(race)
     # 4 speeds -> contested fractions, favors closers
     assert "closers" in shape.projection.lower()
 
 
 def test_pace_shape_oaks_balanced():
-    race = load_race(DATA / "oaks_2026.yaml")
+    race = load_race(DATA / "oaks_day" / "13_kentucky_oaks.yaml")
     shape = pace_shape(race)
     # Oaks has 1 'E' (Dazzling Dame) so projection is the lone-speed branch
     assert shape.counts["E"] == 1
@@ -36,14 +36,14 @@ def test_pace_shape_oaks_balanced():
 
 
 def test_pace_shape_lines_include_horse_names():
-    race = load_race(DATA / "derby_2026.yaml")
+    race = load_race(DATA / "derby_day" / "12_kentucky_derby.yaml")
     text = "\n".join(pace_shape(race).lines())
     assert "Renegade" in text  # closer
     assert "Pavlovian" in text  # speed
 
 
 def test_consensus_orders_by_score():
-    race = load_race(DATA / "derby_2026.yaml")
+    race = load_race(DATA / "derby_day" / "12_kentucky_derby.yaml")
     rows = consensus(race)
     # Renegade (#1) has the highest support score (Moss top + Olczyk use +
     # Public top + House top = 11) so should be first.
@@ -54,7 +54,7 @@ def test_consensus_orders_by_score():
 
 
 def test_value_flags_finds_longer_prices_with_support():
-    race = load_race(DATA / "derby_2026.yaml")
+    race = load_race(DATA / "derby_day" / "12_kentucky_derby.yaml")
     rows = value_flags(race, min_score=2, min_price=8.0)
     posts = {r.horse.post for r in rows}
     # Emerging Market (#15, 15-1, score 3), Chief Wallabee (#12, 8-1, score 3),
@@ -66,7 +66,7 @@ def test_value_flags_finds_longer_prices_with_support():
 
 
 def test_longshot_watch_includes_olczyk_pick():
-    race = load_race(DATA / "derby_2026.yaml")
+    race = load_race(DATA / "derby_day" / "12_kentucky_derby.yaml")
     rows = longshot_watch(race)
     posts = {r.horse.post for r in rows}
     # Golden Tempo (#19) is Olczyk's longshot
@@ -74,7 +74,7 @@ def test_longshot_watch_includes_olczyk_pick():
 
 
 def test_oaks_consensus_populated_by_synthesis_experts():
-    race = load_race(DATA / "oaks_2026.yaml")
+    race = load_race(DATA / "oaks_day" / "13_kentucky_oaks.yaml")
     rows = consensus(race)
     posts = {r.horse.post for r in rows}
     # Top-tier of synthesis experts: Zany (2), Percy's Bar (9), Meaning (5)
