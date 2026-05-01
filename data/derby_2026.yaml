@@ -1,0 +1,192 @@
+name: 2026 Kentucky Derby (G1)
+date: 2026-05-02
+post_time_et: "18:57"
+distance: "1 1/4 miles"
+purse_usd: 5000000
+track: Churchill Downs
+notes: |
+  20-horse field after scratches of Silent Tactic and Fulleffort; Great White
+  and Ocelli drew in from AE list. Post 13 / Great White assignment unverified
+  in source data — verify on Churchill Downs official board before betting.
+  ML odds set 2026-04-25.
+
+horses:
+  - post: 1
+    name: Renegade
+    ml: "4-1"
+    live_odds: null
+    jockey: Irad Ortiz Jr.
+    trainer: Todd Pletcher
+    style: S
+    notes: Arkansas Derby winner; closed final 1/8 in 11.84 (best in field)
+
+  - post: 2
+    name: Albus
+    ml: "30-1"
+    live_odds: null
+    jockey: Manny Franco
+    trainer: Riley Mott
+    style: P
+    notes: ""
+
+  - post: 3
+    name: Intrepido
+    ml: "50-1"
+    live_odds: null
+    jockey: Hector Berrios
+    trainer: Jeff Mullins
+    style: P
+    notes: ""
+
+  - post: 4
+    name: Litmus Test
+    ml: "30-1"
+    live_odds: null
+    jockey: Martin Garcia
+    trainer: Bob Baffert
+    style: P
+    notes: ""
+
+  - post: 5
+    name: Right to Party
+    ml: "30-1"
+    live_odds: null
+    jockey: Chris Elliott
+    trainer: Kenny McPeek
+    style: P
+    notes: ""
+
+  - post: 6
+    name: Commandment
+    ml: "6-1"
+    live_odds: null
+    jockey: Luis Saez
+    trainer: Brad Cox
+    style: EP
+    notes: Florida Derby winner; 4 wins; 100/101 Beyers; beat Chief Wallabee + The Puma
+
+  - post: 7
+    name: Danon Bourbon
+    ml: "20-1"
+    live_odds: null
+    jockey: Atsuya Nishimura
+    trainer: Manabu Ikezoe
+    style: P
+    notes: Japan shipper
+
+  - post: 8
+    name: So Happy
+    ml: "15-1"
+    live_odds: null
+    jockey: Mike Smith
+    trainer: Mark Glatt
+    style: E
+    notes: Front speed; 100 Beyer
+
+  - post: 9
+    name: The Puma
+    ml: "10-1"
+    live_odds: null
+    jockey: Javier Castellano
+    trainer: Gustavo Delgado
+    style: EP
+    notes: Florida Derby 2nd; 100 Beyer
+
+  - post: 10
+    name: Wonder Dean
+    ml: "30-1"
+    live_odds: null
+    jockey: Ryusei Sakai
+    trainer: Daisuke Takayanagi
+    style: P
+    notes: Japan shipper
+
+  - post: 11
+    name: Incredibolt
+    ml: "20-1"
+    live_odds: null
+    jockey: Jaime Torres
+    trainer: Riley Mott
+    style: P
+    notes: ""
+
+  - post: 12
+    name: Chief Wallabee
+    ml: "8-1"
+    live_odds: null
+    jockey: Junior Alvarado
+    trainer: Bill Mott
+    style: S
+    notes: Florida Derby 3rd; 3-for-3 ITM in graded company; 100 Beyer
+
+  - post: 13
+    name: Great White
+    ml: "50-1"
+    live_odds: null
+    jockey: Alex Achard
+    trainer: John Ennis
+    style: P
+    notes: AE drew in after Silent Tactic scratch; post unverified
+
+  - post: 14
+    name: Potente
+    ml: "20-1"
+    live_odds: null
+    jockey: Juan Hernandez
+    trainer: Bob Baffert
+    style: E
+    notes: Front speed
+
+  - post: 15
+    name: Emerging Market
+    ml: "15-1"
+    live_odds: null
+    jockey: Flavien Prat
+    trainer: Chad Brown
+    style: P
+    notes: Louisiana Derby winner; Olczyk top pick
+
+  - post: 16
+    name: Pavlovian
+    ml: "30-1"
+    live_odds: null
+    jockey: Edwin Maldonado
+    trainer: Doug O'Neill
+    style: E
+    notes: Sunland Derby winner; sub-:23 / sub-:46 fractions in LA Derby
+
+  - post: 17
+    name: Six Speed
+    ml: "50-1"
+    live_odds: null
+    jockey: TBD
+    trainer: Bhupat Seemar
+    style: E
+    notes: Pure front speed
+
+  - post: 18
+    name: Further Ado
+    ml: "6-1"
+    live_odds: null
+    jockey: John Velazquez
+    trainer: Brad Cox
+    style: P
+    notes: Blue Grass winner by 11L; field-best 106 Beyer; possible underlay
+
+  - post: 19
+    name: Golden Tempo
+    ml: "30-1"
+    live_odds: null
+    jockey: Jose Ortiz
+    trainer: Cherie DeVaux
+    style: S
+    notes: Louisiana Derby 3rd; Olczyk longshot pick
+
+  - post: 20
+    name: Ocelli
+    ml: "50-1"
+    live_odds: null
+    jockey: Joe Ramos
+    trainer: D. Whitworth Beckman
+    style: P
+    notes: AE drew in after Fulleffort scratch

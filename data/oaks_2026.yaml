@@ -1,0 +1,127 @@
+name: 2026 Kentucky Oaks (G1)
+date: 2026-05-01
+post_time_et: "20:40"
+distance: "1 1/8 miles"
+purse_usd: 1500000
+track: Churchill Downs
+notes: |
+  13 fillies after Nycon scratch from original 14. ML odds set 2026-04-25.
+  Edit `live_odds` on each horse to compute overlay/underlay vs morning line.
+
+horses:
+  - post: 1
+    name: Explora
+    ml: "6-1"
+    live_odds: null
+    jockey: Flavien Prat
+    trainer: Bob Baffert
+    style: EP
+    notes: Forward type, rail trip risk at 1 1/8
+
+  - post: 2
+    name: Zany
+    ml: "4-1"
+    live_odds: null
+    jockey: Irad Ortiz Jr.
+    trainer: Todd Pletcher
+    style: P
+    notes: Demoiselle G2 + Suncoast winner; 2nd Ashland; proven at 1 1/8
+
+  - post: 3
+    name: Search Party
+    ml: "30-1"
+    live_odds: null
+    jockey: Cristian Torres
+    trainer: Mark Casse
+    style: S
+    notes: ""
+
+  - post: 4
+    name: Counting Stars
+    ml: "8-1"
+    live_odds: null
+    jockey: Francisco Arrieta
+    trainer: Mark Casse
+    style: S
+    notes: Fantasy G2 winner, Honeybee G3 2nd
+
+  - post: 5
+    name: Meaning
+    ml: "5-1"
+    live_odds: null
+    jockey: Juan Hernandez
+    trainer: Michael McCarthy
+    style: EP
+    notes: Las Virgenes + Santa Anita Oaks winner; west-coast form
+
+  - post: 6
+    name: Dazzling Dame
+    ml: "30-1"
+    live_odds: null
+    jockey: Luis Saez
+    trainer: Brittany Russell
+    style: E
+    notes: ""
+
+  - post: 7
+    name: Always A Runner
+    ml: "10-1"
+    live_odds: null
+    jockey: Jose Ortiz
+    trainer: Chad Brown
+    style: P
+    notes: Gazelle G2 winner over Pashmina; proven 1 1/8; sharp value flag
+
+  - post: 8
+    name: Prom Queen
+    ml: "8-1"
+    live_odds: null
+    jockey: Javier Castellano
+    trainer: Brad Cox
+    style: P
+    notes: ""
+
+  - post: 9
+    name: Percy's Bar
+    ml: "6-1"
+    live_odds: null
+    jockey: Luan Machado
+    trainer: Ben Colebrook
+    style: S
+    notes: Ashland winner (beat Zany head-to-head)
+
+  - post: 10
+    name: Pashmina
+    ml: "30-1"
+    live_odds: null
+    jockey: Ramon Vazquez
+    trainer: Rob Atras
+    style: P
+    notes: Gazelle G2 2nd to Always A Runner
+
+  - post: 11
+    name: Brooklyn Blonde
+    ml: "30-1"
+    live_odds: null
+    jockey: Kazushi Kimura
+    trainer: Michael McCarthy
+    style: S
+    notes: ""
+
+  - post: 12
+    name: Lovely Grey
+    ml: "30-1"
+    live_odds: null
+    jockey: Dylan Davis
+    trainer: Kelsey Danner
+    style: S
+    notes: ""
+
+  - post: 13
+    name: Resist
+    ml: "50-1"
+    live_odds: null
+    jockey: Irving Moncada
+    trainer: Thomas Drury Jr.
+    style: S
+    notes: ""
