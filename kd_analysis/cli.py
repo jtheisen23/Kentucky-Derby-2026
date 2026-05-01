@@ -294,6 +294,10 @@ def main() -> None:
     p_card.add_argument("card", choices=["oaks_day", "derby_day"])
     p_card.set_defaults(func=cmd_card)
 
+    p_win = sub.add_parser("winners", help="Show winner picks for every race on a day")
+    p_win.add_argument("card", choices=["oaks_day", "derby_day"])
+    p_win.set_defaults(func=cmd_winners)
+
     args = parser.parse_args()
     args.func(args)
 
@@ -322,18 +326,45 @@ def cmd_render(args: argparse.Namespace) -> None:
 def cmd_card(args: argparse.Namespace) -> None:
     card = _load_card(args.card)
     print(f"\n{card.name} — {card.date} — {card.track}")
-    print(f"{'#':<3}{'Post':<8}{'Race':<48}{'Grade':<6}{'Distance':<14}{'Surface':<7}{'Status':<13}{'Purse':>10}")
-    print("-" * 109)
+    print(
+        f"{'#':<3}{'Post':<8}{'Race':<46}{'Grade':<6}"
+        f"{'Distance':<14}{'Surface':<7}{'Pick':<22}{'Purse':>10}"
+    )
+    print("-" * 116)
     for cr in card.races:
         purse = f"${cr.race.purse_usd:,}" if cr.race.purse_usd else "—"
+        pick = cr.race.winner_pick or ("(no pick)" if cr.field_status == "skeleton" else "—")
         print(
             f"{cr.number:<3}{cr.race.post_time_et or '—':<8}"
-            f"{cr.race.name[:47]:<48}{cr.grade or '—':<6}"
+            f"{cr.race.name[:45]:<46}{cr.grade or '—':<6}"
             f"{cr.race.distance:<14}{cr.surface or '—':<7}"
-            f"{cr.field_status:<13}{purse:>10}"
+            f"{pick[:21]:<22}{purse:>10}"
         )
     if card.notes:
         print(f"\n{card.notes.strip()}")
+
+
+def cmd_winners(args: argparse.Namespace) -> None:
+    card = _load_card(args.card)
+    print(f"\n{card.name} — winner picks\n")
+    any_pick = False
+    for cr in card.races:
+        if not cr.race.winner_pick:
+            continue
+        any_pick = True
+        print(f"R{cr.number} ({cr.race.post_time_et} ET) — {cr.race.name}")
+        print(f"  PICK: {cr.race.winner_pick}")
+        if cr.race.winner_reason:
+            for line in cr.race.winner_reason.strip().splitlines():
+                print(f"        {line.strip()}")
+        print()
+    if not any_pick:
+        print("(no picks set in this card's YAML files)")
+    skipped = [cr for cr in card.races if not cr.race.winner_pick]
+    if skipped:
+        print("Races without picks (no public field data available):")
+        for cr in skipped:
+            print(f"  R{cr.number} ({cr.race.post_time_et}) — {cr.race.name}")
 
 
 if __name__ == "__main__":

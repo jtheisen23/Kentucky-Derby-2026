@@ -72,6 +72,8 @@ class Race:
     purse_usd: int = 0
     notes: str = ""
     experts: list[Expert] = field(default_factory=list)
+    winner_pick: str = ""        # name of the synthesized winner pick
+    winner_reason: str = ""      # short justification
 
     def by_post(self, post: int) -> Horse:
         for h in self.horses:

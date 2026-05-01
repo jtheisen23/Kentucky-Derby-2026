@@ -369,6 +369,11 @@ def _card_table(card: Card, marquee_link_prefix: str = "") -> str:
             status_tag = " <span class='tag use'>stakes</span>"
         elif cr.field_status == "full":
             status_tag = " <span class='tag top'>full preview</span>"
+        pick_html = (
+            f"<strong>{_esc(cr.race.winner_pick)}</strong>"
+            if cr.race.winner_pick
+            else "<span class='ml'>—</span>"
+        )
         rows.append(
             f"<tr>"
             f"<td class='num'>{cr.number}</td>"
@@ -377,13 +382,13 @@ def _card_table(card: Card, marquee_link_prefix: str = "") -> str:
             f"<td>{_esc(cr.grade or '—')}</td>"
             f"<td>{_esc(cr.race.distance)}</td>"
             f"<td>{_esc(cr.surface or '—')}</td>"
-            f"<td>{_esc(cr.conditions or '—')}</td>"
+            f"<td>{pick_html}</td>"
             f"<td class='num'>{purse}</td>"
             f"</tr>"
         )
     head = (
         "<tr><th class='num'>R#</th><th>Post</th><th>Race</th><th>Grade</th>"
-        "<th>Distance</th><th>Surface</th><th>Conditions</th><th class='num'>Purse</th></tr>"
+        "<th>Distance</th><th>Surface</th><th>Pick</th><th class='num'>Purse</th></tr>"
     )
     return f"<table><thead>{head}</thead><tbody>{''.join(rows)}</tbody></table>"
 
@@ -434,6 +439,32 @@ def render_index(races: list[tuple[str, Race]], cards: list[Card] | None = None)
     return _layout("2026 Kentucky Oaks & Derby", "".join(sections))
 
 
+def _picks_section(card: Card) -> str:
+    """Per-race winner picks with justification."""
+    cards_html = []
+    for cr in card.races:
+        if not cr.race.winner_pick:
+            continue
+        cards_html.append(
+            "<div class='card'>"
+            f"<div><span class='post'>R{cr.number}</span>"
+            f"<span class='ml'>{cr.race.post_time_et} ET &middot; {_esc(cr.race.name)}</span></div>"
+            f"<div><strong>Pick: {_esc(cr.race.winner_pick)}</strong></div>"
+            + (
+                f"<div class='note'>{_esc(cr.race.winner_reason.strip())}</div>"
+                if cr.race.winner_reason
+                else ""
+            )
+            + "</div>"
+        )
+    if not cards_html:
+        return ""
+    return (
+        "<h2>Winner picks</h2>"
+        f"<div class='cards'>{''.join(cards_html)}</div>"
+    )
+
+
 def render_card(card: Card) -> str:
     """Render a per-day card index listing every race with details."""
     notes_html = (
@@ -445,6 +476,7 @@ def render_card(card: Card) -> str:
         f"<p class='meta'>{_esc(card.date)} &middot; {_esc(card.track)} &middot; {len(card.races)} races</p>"
         f"{_card_table(card, marquee_link_prefix='../')}"
         f"{notes_html}"
+        f"{_picks_section(card)}"
     )
     return _layout(card.name, body, prefix="../")
 

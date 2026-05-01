@@ -9,6 +9,9 @@ conditions: 3-year-old fillies
 field_status: full
 purse_usd: 1500000
 track: Churchill Downs
+winner_pick: Percy's Bar
+winner_reason: |
+  Beat ML-favorite Zany head-to-head in the Ashland (G1); getting better odds (6-1 vs 4-1) for the same form. Lone-speed pace shape with deep closer pool fits her late-running style.
 notes: |
   13 fillies after Nycon scratch from original 14. ML odds set 2026-04-25.
   Edit `live_odds` on each horse to compute overlay/underlay vs morning line.
