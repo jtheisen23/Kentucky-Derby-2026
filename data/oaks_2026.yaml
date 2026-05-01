@@ -125,3 +125,39 @@ horses:
     trainer: Thomas Drury Jr.
     style: S
     notes: ""
+
+experts:
+  - name: Eddie Olczyk
+    affiliation: NBC / Xpressbet / TwinSpires
+    top_picks: []
+    use_horses: []
+    longshots: []
+    source: https://www.xpressbet.com/eddie-olczyk-picks
+    notes: |
+      No specific Oaks ticket retrieved from public search; BetMGM and
+      Read Horse Racing pages with Olczyk's published picks blocked
+      automated fetch. Watch the NBC primetime Oaks broadcast for his
+      on-air selection or check Xpressbet directly.
+    tbd: true
+
+  - name: Randy Moss
+    affiliation: NBC Sports
+    top_picks: []
+    use_horses: []
+    longshots: []
+    source: https://www.nbcsports.com/pressbox/bios/randy-moss
+    notes: |
+      No specific Oaks pick captured from public search. Moss is on the
+      NBC primetime broadcast tonight — check on-air selection.
+    tbd: true
+
+  - name: Mike Somich
+    affiliation: VSiN At The Track / Racing Dudes
+    top_picks: []
+    use_horses: []
+    longshots: []
+    source: https://vsin.com/horse-racing/kentucky-oaks-2026-entries-horses-odds-and-predictions/
+    notes: |
+      Specific Oaks selections not retrievable from public search.
+      Fill in from the VSiN guide or the Magic Mike Show podcast.
+    tbd: true

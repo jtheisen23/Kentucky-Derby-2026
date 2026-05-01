@@ -190,3 +190,44 @@ horses:
     trainer: D. Whitworth Beckman
     style: P
     notes: AE drew in after Fulleffort scratch
+
+experts:
+  - name: Eddie Olczyk
+    affiliation: NBC / Xpressbet / TwinSpires
+    top_picks: [15]            # Emerging Market
+    use_horses: [1]            # Renegade despite the post
+    longshots: [19]            # Golden Tempo
+    source: https://readhorseracing.com/2026/05/01/eddie-olczyk-kentucky-derby-picks-churchill-downs/
+    notes: |
+      Calls it a "super-tough renewal"; spreading. Original tickets included
+      Fulleffort (#20 — scratched) and Silent Tactic (#13 — scratched), so
+      the picks above are the post-scratch published version.
+    tbd: false
+
+  - name: Randy Moss
+    affiliation: NBC Sports
+    top_picks: [6, 18, 1, 9, 12]   # Commandment, Further Ado, Renegade, The Puma, Chief Wallabee
+    use_horses: [11]               # Incredibolt — found "visually impressive" in Virginia Derby
+    longshots: []
+    source: https://www.americasbestracing.net/the-sport/2026-nbc-sports-randy-moss-discusses-pros-and-cons-2026-kentucky-derby-horses
+    notes: |
+      Narrowed race to top-5 (Commandment, Further Ado, Renegade, The Puma,
+      Chief Wallabee). Concerned Further Ado may be "not particularly big,
+      robust" and could be adversely affected by his 11-length Blue Grass
+      effort. Likes Chief Wallabee since blinkers were added. No published
+      single win bet — said he might decide on Oaks Day.
+    tbd: false
+
+  - name: Mike Somich
+    affiliation: VSiN At The Track / Racing Dudes (Magic Mike Show)
+    top_picks: []
+    use_horses: []
+    longshots: []
+    source: https://vsin.com/wp-content/uploads/2026/04/2026-Kentucky-Derby-Betting-Guide.pdf
+    notes: |
+      Contributes to VSiN 2026 Kentucky Derby Betting Guide (pace + post
+      report, superfecta strategy) and the Racing Dudes Pick 5 preview.
+      Specific selections were not retrievable from public search; the
+      VSiN PDF and the Magic Mike Show podcast (ep. 620) blocked
+      automated fetch. Fill in once you have the guide.
+    tbd: true
